@@ -2,10 +2,8 @@ package com.example.demoapp.repository
 
 import com.example.demoapp.data.ApiService
 import com.example.demoapp.model.LogInModel
-import io.reactivex.Completable
+import com.example.demoapp.model.UserRequest
 import io.reactivex.Single
-import okhttp3.RequestBody
-import retrofit2.http.Body
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,7 +25,7 @@ class ProfileRepository @Inject constructor(
         api: String
     ): Single<LogInModel> {
         return apiService.userLogIn(
-          email, pwd, application, application_type, application_version, device_id, device_name, device_type, os_version, api
+            UserRequest(email, pwd, application, application_type, application_version, device_id, device_name, device_type, os_version, api)
         )
     }
 }

@@ -9,15 +9,6 @@ interface ApiService {
 
     @POST("/")
     fun userLogIn(
-        @Body email: String,
-        @Body pwd: String,
-        @Body application: String,
-        @Body application_type: Int,
-        @Body application_version: String,
-        @Body device_id: String,
-        @Body device_name: String,
-        @Body device_type: Int,
-        @Body os_version: String,
-        @Body api: String
+        @Body userRequest: UserRequest
     ): Single<LogInModel>
 }

@@ -3,6 +3,7 @@ package com.example.demoapp.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.demoapp.Constant
 import com.example.demoapp.model.Data
 import com.example.demoapp.model.LogInModel
 import com.example.demoapp.usecase.GetUsersListUseCase
@@ -32,7 +33,18 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun userLogInAuthetication() {
-        userLogInUseCase.invoke()
+        userLogInUseCase.invoke(
+            Constant.EMAIL,
+            Constant.PWD,
+            Constant.APPLICATION,
+            Constant.APPLICATION_TYPE,
+            Constant.APPLICATION_VERSION,
+            Constant.DEVICE_ID,
+            Constant.DEVICE_NAME,
+            Constant.DEVICE_TYPE,
+            Constant.OS_VERSION,
+            Constant.API
+        )
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribeBy(

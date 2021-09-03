@@ -14,13 +14,15 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
     private val viewModel: ProfileViewModel by viewModels()
 
-    var token: String? = null
+    private lateinit var tokenManger: TokenManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = MainFragmentBinding.bind(view)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
+
+        tokenManger = TokenManager(requireContext())
 
         binding.logInButton.setOnClickListener {
             viewModel.userLogInAuthetication()
@@ -30,8 +32,8 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         viewModel.logInData.observe(
             viewLifecycleOwner,
             {
+                tokenManger.saveToken(it.token)
                 binding.logInTextView.text = it.token
-                token = it.token
             }
         )
     }

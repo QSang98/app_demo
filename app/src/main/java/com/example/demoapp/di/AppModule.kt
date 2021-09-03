@@ -40,8 +40,8 @@ object AppModule {
     }
 
     @Provides
-    fun providesInterceptor(): AuthenInterceptor {
-        return AuthenInterceptor()
+    fun providesInterceptor(@ApplicationContext context: Context): AuthenInterceptor {
+        return AuthenInterceptor(context)
     }
 
     @Provides

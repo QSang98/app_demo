@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.demoapp.Constant
 import com.example.demoapp.model.Data
-import com.example.demoapp.model.LogInModel
-import com.example.demoapp.usecase.GetUsersListUseCase
+import com.example.demoapp.model.UserModel
+import com.example.demoapp.usecase.GetUserUseCase
 import com.example.demoapp.usecase.UserLogInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,13 +14,13 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import okhttp3.RequestBody
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val userLogInUseCase: UserLogInUseCase
+    private val userLogInUseCase: UserLogInUseCase,
+    private val getUserUseCase: GetUserUseCase
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -28,9 +28,8 @@ class ProfileViewModel @Inject constructor(
     val logInData: LiveData<Data> get() = _logInData
     private val _logInData = MutableLiveData<Data>()
 
-    init {
-        userLogInAuthetication()
-    }
+    val userData: LiveData<UserModel> get() = _userData
+    private val _userData = MutableLiveData<UserModel>()
 
     fun userLogInAuthetication() {
         userLogInUseCase.invoke(
@@ -50,6 +49,22 @@ class ProfileViewModel @Inject constructor(
             .subscribeBy(
                 onSuccess = {
                     _logInData.postValue(it.data)
+                    Timber.i("success!")
+                },
+                onError = {
+                    Timber.e("error")
+                }
+            )
+            .addTo(disposables)
+    }
+
+    fun getUserProfile() {
+        getUserUseCase.invoke(Constant.API_USER)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    _userData.postValue(it)
                     Timber.i("success!")
                 },
                 onError = {

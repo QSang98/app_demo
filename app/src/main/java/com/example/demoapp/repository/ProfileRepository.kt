@@ -2,6 +2,8 @@ package com.example.demoapp.repository
 
 import com.example.demoapp.data.ApiService
 import com.example.demoapp.model.LogInModel
+import com.example.demoapp.model.LogInRequest
+import com.example.demoapp.model.UserModel
 import com.example.demoapp.model.UserRequest
 import io.reactivex.Single
 import javax.inject.Inject
@@ -25,7 +27,11 @@ class ProfileRepository @Inject constructor(
         api: String
     ): Single<LogInModel> {
         return apiService.userLogIn(
-            UserRequest(email, pwd, application, application_type, application_version, device_id, device_name, device_type, os_version, api)
+            LogInRequest(email, pwd, application, application_type, application_version, device_id, device_name, device_type, os_version, api)
         )
+    }
+
+    fun getUser(api: String): Single<UserModel> {
+        return apiService.getUser(UserRequest(api))
     }
 }

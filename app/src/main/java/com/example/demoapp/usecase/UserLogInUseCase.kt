@@ -24,7 +24,7 @@ class UserLogInUseCase @Inject constructor(
         api: String
     ): Single<LogInModel> {
         return profileRepository.userLogIn(
-           email, pwd, application, application_type, application_version, device_id, device_name, device_type, os_version, api
+            email, pwd, application, application_type, application_version, device_id, device_name, device_type, os_version, api
         )
     }
 }

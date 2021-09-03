@@ -1,12 +1,15 @@
 package com.example.demoapp.di
 
+import android.content.Context
 import com.example.demoapp.BuildConfig
 import com.example.demoapp.data.ApiService
+import com.example.demoapp.data.AuthenInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -30,10 +33,15 @@ object AppModule {
         .build()
 
     @Provides
-    fun providesClientBuilder(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    fun providesClientBuilder(authenInterceptor: AuthenInterceptor, httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         val clientBuilder = OkHttpClient.Builder()
 
-        return clientBuilder.addInterceptor(httpLoggingInterceptor).build()
+        return clientBuilder.addInterceptor(httpLoggingInterceptor).addInterceptor(authenInterceptor).build()
+    }
+
+    @Provides
+    fun providesInterceptor(): AuthenInterceptor {
+        return AuthenInterceptor()
     }
 
     @Provides

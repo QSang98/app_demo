@@ -2,6 +2,9 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <variable
+            name="viewModel"
+            type="com.example.demoapp.ui.ProfileViewModel" />
 
     </data>
 
@@ -17,10 +20,12 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/user"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:orientation="horizontal"
             android:layout_marginTop="100dp">
+
             <ImageView
                 android:id="@+id/photoImageView"
                 android:background="@color/red"
@@ -28,13 +33,49 @@
                 android:layout_height="120dp"
                 android:layout_marginStart="15dp"
                 android:src="@drawable/ic_add_photo_foreground"/>
-            <TextView
-                android:id="@+id/nameTextView"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textStyle="bold"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:lines="1"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:id="@+id/birthdayTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="birthday"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:lines="1"
+                    android:ellipsize="end"/>
+
+            </LinearLayout>
+
         </LinearLayout>
+
+        <TextView
+            android:layout_below="@+id/user"
+            android:id="@+id/aboutTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="About"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"/>
+
 
     </RelativeLayout>
 

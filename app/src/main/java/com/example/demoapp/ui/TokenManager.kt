@@ -6,9 +6,9 @@ import com.example.demoapp.R
 
 class TokenManager(context: Context) {
 
-    private val pref: SharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE)
+    private var pref: SharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE)
 
-    fun saveToken(token: String) {
+    fun saveToken(token: String?) {
         val editor = pref.edit()
         editor.putString(USER_TOKEN, token)
         editor.apply()

@@ -1,5 +1,7 @@
 package com.example.demoapp
 
+import com.example.demoapp.ui.ProfileViewModel
+
 object Constant {
     const val EMAIL = "t6@grr.la"
     const val PWD = "3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d"
@@ -12,4 +14,5 @@ object Constant {
     const val OS_VERSION = "10"
     const val API = "login_version_2"
     const val API_USER = "get_user_inf"
+    const val API_UPLOAD = "upl_img_version_2"
 }

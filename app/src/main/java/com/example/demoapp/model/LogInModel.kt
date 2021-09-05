@@ -20,7 +20,7 @@ data class CallingSetting(
     val received: Boolean
 )
 
-data class TargetUser2(
+data class TargetUser(
     val any: Any? = null
 )
 

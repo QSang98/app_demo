@@ -1,7 +1,6 @@
 package com.example.demoapp.data
 
 import android.content.Context
-import com.example.demoapp.ui.MainFragment
 import com.example.demoapp.ui.TokenManager
 import okhttp3.Interceptor
 import okhttp3.Response

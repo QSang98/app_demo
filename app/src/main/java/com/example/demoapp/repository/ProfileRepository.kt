@@ -1,11 +1,9 @@
 package com.example.demoapp.repository
 
 import com.example.demoapp.data.ApiService
-import com.example.demoapp.model.LogInModel
-import com.example.demoapp.model.LogInRequest
-import com.example.demoapp.model.UserModel
-import com.example.demoapp.model.UserRequest
+import com.example.demoapp.model.*
 import io.reactivex.Single
+import okhttp3.RequestBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,5 +31,16 @@ class ProfileRepository @Inject constructor(
 
     fun getUser(api: String): Single<UserModel> {
         return apiService.getUser(UserRequest(api))
+    }
+
+    fun updateUser(
+        api: String,
+        token: String,
+        sum: String,
+        size: Long,
+        time: Long,
+        requestBody: RequestBody,
+    ): Single<UpdateModel> {
+        return apiService.updateUser(api, token, sum, size, time, requestBody)
     }
 }

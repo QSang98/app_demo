@@ -10,20 +10,19 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
-import android.provider.OpenableColumns
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.example.demoapp.BuildConfig
 import com.example.demoapp.Constant
 import com.example.demoapp.R
 import com.example.demoapp.databinding.ProfileFragmentBinding
@@ -34,8 +33,11 @@ import okhttp3.RequestBody
 import okio.BufferedSink
 import okio.source
 import java.io.FileDescriptor
+import java.io.FileNotFoundException
 import java.io.IOException
+import java.io.InputStream
 import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import kotlin.jvm.Throws
 
 @AndroidEntryPoint
@@ -116,12 +118,16 @@ class ProfileFragment : Fragment(R.layout.profile_fragment) {
                                 p.close()
                             }
 
-                            val sum = md5(it.toString()).toHex()
+                            val sum = getMD5EncryptedString(requireContext(), it)
 
-                            val imageSize = act.contentResolver.query(it, null, null, null, null)
+                            var imageSize: Long? = null
+
+                            act.contentResolver.query(it, arrayOf(MediaStore.Images.Media.SIZE), null, null, null)
                                 ?.use {
-                                    it.getColumnIndex(OpenableColumns.SIZE).toLong()
-                                } as Long
+                                    while (it.moveToNext()) {
+                                        imageSize = it.getLong(it.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE))
+                                    }
+                                }
 
                             requestBody = it.asRequestBody(requireContext()) as RequestBody
 
@@ -129,7 +135,7 @@ class ProfileFragment : Fragment(R.layout.profile_fragment) {
                                 Constant.API_UPLOAD,
                                 token,
                                 sum,
-                                imageSize,
+                                imageSize as Long,
                                 imageTime as Long,
                                 requestBody
                             )
@@ -189,12 +195,55 @@ class ProfileFragment : Fragment(R.layout.profile_fragment) {
         activityResultLaunch.launch(Intent.createChooser(intent, "Select Picture"))
     }
 
-    private fun md5(str: String): ByteArray = MessageDigest.getInstance("MD5").digest(
-        str.toByteArray(
-            Charsets.UTF_8
-        )
-    )
-    private fun ByteArray.toHex() = joinToString(separator = "") { byte -> "%02x".format(byte) }
+//    private fun md5(str: String): ByteArray = MessageDigest.getInstance("MD5").digest(
+//        str.toByteArray(
+//            Charsets.UTF_8
+//        )
+//    )
+//    private fun ByteArray.toHex() = joinToString(separator = "") { byte -> "%02x".format(byte) }
+
+    fun getMD5EncryptedString(context: Context, uri: Uri): String {
+        var inputStream: InputStream? = null
+        val buffer = ByteArray(1024)
+        try {
+            val mdEnc = MessageDigest.getInstance("MD5")
+            mdEnc.reset()
+            inputStream = context.contentResolver.openInputStream(uri)
+            inputStream?.let {
+                var read: Int?
+                while (true) {
+                    read = it.read(buffer)
+                    if (read < 0) break
+                    mdEnc.update(buffer, 0, read)
+                }
+                val md5sum = mdEnc.digest()
+                val builder = StringBuilder()
+                val HEX = 16
+                val md5Size = md5sum.size
+                for (i in 0 until md5Size) {
+                    builder.append(
+                        ((md5sum[i].toInt() and 0xff) + 0x100).toString(HEX).substring(1)
+                    )
+                }
+                return builder.toString()
+            }
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        return ""
+    }
 
     @Throws(IOException::class)
     fun Uri.asRequestBody(context: Context): RequestBody? {

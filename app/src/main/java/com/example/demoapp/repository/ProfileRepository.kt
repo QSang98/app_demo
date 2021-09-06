@@ -1,6 +1,7 @@
 package com.example.demoapp.repository
 
 import com.example.demoapp.data.ApiService
+import com.example.demoapp.data.ApiService1
 import com.example.demoapp.model.*
 import io.reactivex.Single
 import okhttp3.RequestBody
@@ -9,7 +10,8 @@ import javax.inject.Singleton
 
 @Singleton
 class ProfileRepository @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val apiService1: ApiService1
 ) {
 
     fun userLogIn(
@@ -41,6 +43,6 @@ class ProfileRepository @Inject constructor(
         time: Long,
         requestBody: RequestBody,
     ): Single<UpdateModel> {
-        return apiService.updateUser(api, token, sum, size, time, requestBody)
+        return apiService1.updateUser(api, token, sum, size, time, requestBody)
     }
 }

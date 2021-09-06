@@ -32,10 +32,12 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "BASE_URL", "\"http://gateway-two.ntq.solutions/\""
+            buildConfigField "String", "BASE_URL_UPDATE", "\"http://static-two.ntq.solutions/\""
         }
         release {
             minifyEnabled false
             buildConfigField "String", "BASE_URL", "\"http://gateway-two.ntq.solutions/\""
+            buildConfigField "String", "BASE_URL_UPDATE", "\"http://static-two.ntq.solutions/\""
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

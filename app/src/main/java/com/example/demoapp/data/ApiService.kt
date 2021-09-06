@@ -12,14 +12,4 @@ interface ApiService {
 
     @POST("/")
     fun getUser(@Body userRequest: UserRequest): Single<UserModel>
-
-    @POST("/api={api}&token={token}&img_cat=3&file_id=&sum={sum}&size={size}&time={time}")
-    fun updateUser(
-        @Path("api") api: String,
-        @Path("token") token: String,
-        @Path("sum") sum: String,
-        @Path("size") size: Long,
-        @Path("time") time: Long,
-        @Body requestBody: RequestBody,
-    ): Single<UpdateModel>
 }
